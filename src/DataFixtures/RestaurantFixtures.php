@@ -50,17 +50,20 @@ class RestaurantFixtures extends Fixture implements DependentFixtureInterface
         // Obtener los IDs de los usuarios persistidos usando QueryBuilder
         $userRepository = $manager->getRepository(User::class);
 
-        // Usamos el QueryBuilder para solo traer los IDs de los usuarios
+        // Usamos el QueryBuilder para traer los usuarios
         $this->users = $userRepository->createQueryBuilder('u')
-            ->select('u.id')  // Solo seleccionamos el ID
+            ->select('u')
             ->getQuery()
             ->getResult();
     }
 
-    protected function getRandomUser(ObjectManager $manager) : int
+    protected function getRandomUser(ObjectManager $manager) : ?User
     {
         $this->loadUsers($manager);
 
-        return $this->users[array_rand($this->users)]['id'];
+        if(empty($this->users))
+            return null;
+
+        return $this->users[array_rand($this->users)];
     }
 }

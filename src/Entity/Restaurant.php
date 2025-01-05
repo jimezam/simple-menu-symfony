@@ -52,11 +52,12 @@ class Restaurant
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
-    #[ORM\Column]
-    private ?int $owner = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $activeMenu = null;
+
+    #[ORM\ManyToOne(inversedBy: 'restaurants')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
 
     public function getId(): ?int
     {
@@ -226,18 +227,6 @@ class Restaurant
         return $this;
     }
 
-    public function getOwner(): ?int
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(int $owner): static
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
     public function getActiveMenu(): ?int
     {
         return $this->activeMenu;
@@ -246,6 +235,18 @@ class Restaurant
     public function setActiveMenu(?int $activeMenu): static
     {
         $this->activeMenu = $activeMenu;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }
