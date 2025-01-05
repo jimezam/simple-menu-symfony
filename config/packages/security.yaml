@@ -1,7 +1,19 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        # auto hasher with default options for the User class (and children)
+        # App\Entity\User: 'auto'
+
+        # Hasher automático para todas las entidades PasswordAuthenticatedUserInterface
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+            algorithm: 'auto'  # Symfony seleccionará el algoritmo más adecuado
+
+        # Hasher para la clase User, usando sodium y migración desde bcrypt
+        App\Entity\User:
+            algorithm: sodium  # Algoritmo recomendado para nuevas contraseñas
+            migrate_from:
+                - bcrypt  # Migrar contraseñas antiguas de bcrypt
+
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
