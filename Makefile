@@ -6,6 +6,7 @@ SYMFONY_SERVER_START = $(SYMFONY) serve -d
 SYMFONY_SERVER_STOP = $(SYMFONY) server:stop
 SYMFONY_CONSOLE = $(SYMFONY) console
 SYMFONY_LINT = $(SYMFONY_CONSOLE) lint:
+CONSOLE = php bin/console
 DATABASE_NAME = simple_menu
 #------------#
 
@@ -39,14 +40,18 @@ db.connect: ## Connect to the database
 
 ## —— Migrations 🧙 ——————————————————————————————————————————————————————————————
 migration.create: ## Create a new migration
-	php bin/console make:migration
+	$(CONSOLE) make:migration
 
 migration.migrate: ## Migrate the database
-	php bin/console doctrine:migrations:migrate
+	$(CONSOLE) doctrine:migrations:migrate
 
 ## —— Fixtures 🧙 ——————————————————————————————————————————————————————————————
 fixtures.run: ## Clear the database data and run fixtures
-	php bin/console doctrine:fixtures:load
+	$(CONSOLE) doctrine:fixtures:load
+
+## —— Fixtures 🧙 ——————————————————————————————————————————————————————————————
+cache.clear: ## Clear the cache
+	$(CONSOLE) cache:clear
 
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req symfony/orm-pack'
